@@ -1461,26 +1461,26 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
   }
 
   /* ---------- Séance ---------- */
-  var S = null, C = null;
+  var SES = null, C = null;
   var caseEl = $('#case'), wordsEl = $('#words'), arrowsEl = $('#arrows'), helpEl = $('#help'), toolsEl = $('#tools'),
     choicesEl = $('#choices'), feedbackEl = $('#feedback');
   var STEPS = { v: ['verb', 'subj', 'pers', 'end'], g: ['det', 'num', 'fill'] };
   var FINAL = { v: 'end', g: 'fill' };
 
   function startSession() {
-    S = { queue: planSession(), idx: 0, results: [], extra: 0, failRun: 0, news: [], force: false };
+    SES = { queue: planSession(), idx: 0, results: [], extra: 0, failRun: 0, news: [], force: false };
     show('play');
     startItem();
   }
 
   function startItem() {
-    var it = S.queue[S.idx], sk = prog[it.type];
-    var level = S.force ? 1 : sk.level;
+    var it = SES.queue[SES.idx], sk = prog[it.type];
+    var level = SES.force ? 1 : sk.level;
     C = {
-      it: it, level: level, counted: !S.force, guided: level === 1, help: false, errs: 0, stepErrs: 0,
+      it: it, level: level, counted: !SES.force, guided: level === 1, help: false, errs: 0, stepErrs: 0,
       step: null, found: {}, slots: it.slots ? it.slots.map(function () { return ''; }) : [], done: false, wrongSteps: {}
     };
-    S.force = false;
+    SES.force = false;
     hideCreature();
     caseEl.classList.remove('reussie', 'a-retenter', 'anim-bravo', 'anim-non');
     feedbackEl.textContent = '';
@@ -1534,10 +1534,10 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     $('#consigne').textContent = nb(consigneText(false));
     $('#lvtag').textContent = 'Niveau ' + C.level;
     var dots = '';
-    S.queue.forEach(function (q, i) { dots += '<i class="' + (i < S.idx ? 'on' : i === S.idx ? 'now' : '') + '"></i>'; });
+    SES.queue.forEach(function (q, i) { dots += '<i class="' + (i < SES.idx ? 'on' : i === SES.idx ? 'now' : '') + '"></i>'; });
     $('#dots').innerHTML = dots;
-    $('#dots').setAttribute('aria-valuemax', S.queue.length);
-    $('#dots').setAttribute('aria-valuenow', S.idx);
+    $('#dots').setAttribute('aria-valuemax', SES.queue.length);
+    $('#dots').setAttribute('aria-valuenow', SES.idx);
 
     var picking = !C.done && (C.step === 'verb' || C.step === 'subj' || C.step === 'det');
     wordsEl.classList.toggle('pick', picking);
@@ -1552,7 +1552,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
 
     var html = '';
     if (C.done) {
-      var last = S.idx >= S.queue.length - 1;
+      var last = SES.idx >= SES.queue.length - 1;
       html = '<button class="btn btn-action wide" type="button" data-c="next">' + (last ? 'Voir mon bilan' : 'Phrase suivante →') + '</button>';
     } else if (C.step === 'pers') {
       html = '<button class="btn deux" type="button" data-c="sg">il · elle<small>un seul</small></button><button class="btn deux" type="button" data-c="pl">ils · elles<small>plusieurs</small></button>';
@@ -1783,19 +1783,19 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     day.n += 1; if (clean) day.ok += 1;
     prog.days[d] = day;
     prog.stars = (prog.stars || 0) + 1;
-    S.results.push(clean);
+    SES.results.push(clean);
     if (C.counted) {
       sk.hist.push({ d: d, lv: C.level, ok: clean });
       if (sk.hist.length > 80) sk.hist = sk.hist.slice(-80);
       levelCheck(it.type);
     }
     // Simplifier si ça coince : après deux phrases avec erreur, la suivante est guidée (sans compter pour le niveau).
-    S.failRun = clean ? 0 : S.failRun + 1;
-    if (S.failRun >= 2) { S.force = true; S.failRun = 0; }
+    SES.failRun = clean ? 0 : SES.failRun + 1;
+    if (SES.failRun >= 2) { SES.force = true; SES.failRun = 0; }
     // Une phrase ratée revient un peu plus tard dans la séance.
-    if (!clean && S.extra < MAX_EXTRA && S.queue.slice(S.idx + 1).indexOf(it) < 0) {
-      S.extra += 1;
-      S.queue.splice(Math.min(S.queue.length, S.idx + 3), 0, it);
+    if (!clean && SES.extra < MAX_EXTRA && SES.queue.slice(SES.idx + 1).indexOf(it) < 0) {
+      SES.extra += 1;
+      SES.queue.splice(Math.min(SES.queue.length, SES.idx + 3), 0, it);
     }
     saveProg();
   }
@@ -1809,13 +1809,13 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     var oks = recent.filter(function (h) { return h.ok; }).length;
     var days = {}; recent.forEach(function (h) { days[h.d] = 1; });
     if (oks < NEED || Object.keys(days).length < 2) return;
-    if (sk.level < 3) { sk.level += 1; S.news.push('Nouveau niveau : ' + SKILL_NAME[type] + ', niveau ' + sk.level + ' !'); }
-    else { sk.won = today(); S.news.push('Trophée gagné : ' + SKILL_NAME[type] + ' !'); }
+    if (sk.level < 3) { sk.level += 1; SES.news.push('Nouveau niveau : ' + SKILL_NAME[type] + ', niveau ' + sk.level + ' !'); }
+    else { sk.won = today(); SES.news.push('Trophée gagné : ' + SKILL_NAME[type] + ' !'); }
   }
 
   function nextItem() {
-    if (S.idx >= S.queue.length - 1) return finish();
-    S.idx += 1;
+    if (SES.idx >= SES.queue.length - 1) return finish();
+    SES.idx += 1;
     startItem();
   }
 
@@ -1824,20 +1824,20 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     day.s = (day.s || 0) + 1;
     prog.days[d] = day;
     saveProg();
-    var n = S.results.length, first = S.results.filter(Boolean).length, s = '';
+    var n = SES.results.length, first = SES.results.filter(Boolean).length, s = '';
     for (var i = 0; i < n; i++) s += '<span>★</span>';
     $('#stars').innerHTML = s;
     $('#doneTitle').textContent = n ? 'Enquête terminée !' : 'À bientôt !';
     $('#doneText').textContent = nb(n
       ? n + ' phrase' + (n > 1 ? 's' : '') + ' résolue' + (n > 1 ? 's' : '') + ', ' + n + ' étoile' + (n > 1 ? 's' : '') + '. ' + (first ? first + ' du premier coup.' : 'Tu as tout trouvé avec les indices, c\'est comme ça qu\'on apprend.')
       : '');
-    var news = S.news.slice();
+    var news = SES.news.slice();
     if (day.s === 1) news.unshift('Badge du jour gagné : séance faite !');
     $('#news').innerHTML = news.map(function (t) { return '<li>' + esc(nb(t)) + '</li>'; }).join('');
     $('#doneArt').innerHTML = creatureSvg(nextCreature());
     show('done');
     sound('win');
-    if (S.news.length || day.s === 1) confetti();
+    if (SES.news.length || day.s === 1) confetti();
     say('Enquête terminée ! À demain !');
   }
 
@@ -1871,7 +1871,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     var txt = C.done ? C.it.text : consigneText(true) + ' ' + C.it.text;
     say(txt, true);
   });
-  $('#quit').addEventListener('click', function () { S = null; C = null; hideCreature(); renderHome(); show('home'); });
+  $('#quit').addEventListener('click', function () { SES = null; C = null; hideCreature(); renderHome(); show('home'); });
   $('#startBtn').addEventListener('click', startSession);
   $('#backBtn').addEventListener('click', function () { renderHome(); show('home'); });
 
