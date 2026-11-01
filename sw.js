@@ -1,6 +1,6 @@
 // Garde l'appli disponible hors ligne.
 // Changer CACHE à chaque mise à jour des fichiers listés ci-dessous.
-var CACHE = 'detective-des-accords-v2';
+var CACHE = 'detective-des-accords-v3';
 var FILES = [
   './',
   './index.html',

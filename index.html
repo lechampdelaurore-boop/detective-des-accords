@@ -1477,7 +1477,9 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     var it = SES.queue[SES.idx], sk = prog[it.type];
     var level = SES.force ? 1 : sk.level;
     C = {
-      it: it, level: level, counted: !SES.force, guided: level === 1, help: false, errs: 0, stepErrs: 0,
+      it: it, level: level, counted: !SES.force, guided: level === 1, help: false,
+      // Niveau 1 : le verbe s'affiche en entier tant qu'il n'est pas trouvé, pour que la case vide ne le trahisse pas.
+      fullVerb: level === 1, errs: 0, stepErrs: 0,
       step: null, found: {}, slots: it.slots ? it.slots.map(function () { return ''; }) : [], done: false, wrongSteps: {}
     };
     SES.force = false;
@@ -1572,7 +1574,8 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     if (it.type === 'v') {
       if (w.subj && C.found.subj) cls += ' subj';
       if (w.verb && (C.found.verb || !C.guided)) cls += ' verb';
-      if (w.verb) {
+      if (w.verb && C.fullVerb && !C.found.verb) inner = esc(w.t);
+      else if (w.verb) {
         inner = esc(w.stem) + (C.found.end ? '<b class="end' + (w.end === 'e' ? ' e' : '') + '">' + w.end + '</b>' : '<span class="slot wide" aria-label="fin à trouver"></span>') + esc(w.punct);
       } else inner = esc(w.t);
     } else {
@@ -1685,7 +1688,12 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
   function onWord(i) {
     var it = C.it, w = it.words[i];
     if (C.step === 'verb') {
-      if (w.verb) { C.found.verb = true; good('Oui ! « ' + it.verb.stem + '… » est le verbe.'); goStep('subj', true); return; }
+      if (w.verb) {
+        C.found.verb = true;
+        good(C.fullVerb ? 'Oui ! « ' + splitPunct(w.t)[0] + ' » est le verbe. On cache sa fin : c\'est elle qu\'on va vérifier.' : 'Oui ! « ' + it.verb.stem + '… » est le verbe.');
+        goStep('subj', true);
+        return;
+      }
       oops('<b>Astuce :</b> dis la phrase avec « hier » : ' + hierHtml() + ' Le mot qui change, c\'est le verbe.');
       if (C.stepErrs >= 2) pulse('.w.verb, [data-i="' + it.words.indexOf(it.verb) + '"]');
     } else if (C.step === 'subj') {
