@@ -24,7 +24,7 @@ Les progrès restent dans le navigateur de l'appareil (clés `marc.accords.*`) :
 
 ## Fichiers
 
-- `index.html` : toute l'appli (HTML, CSS et JavaScript, sans bibliothèque). Le haut du style est la charte commune des applis de Marc. Les phrases sont en haut du script (`VERBS` et `GROUPS`), avec leur notation expliquée en commentaire.
+- `index.html` : toute l'appli (HTML, CSS et JavaScript, sans bibliothèque). Le haut du style est la charte commune des applis. Les phrases sont en haut du script (`VERBS` et `GROUPS`), avec leur notation expliquée en commentaire.
 - `sw.js` et `manifest.webmanifest` : mode hors ligne et installation. Après une modification des fichiers de l'appli, changer la valeur de `CACHE` dans `sw.js`.
 - `fonts/` : polices Fredoka et Nunito (licence SIL Open Font License, voir les fichiers `OFL-*.txt`).
 - `tests/telephone.cjs` et `.github/workflows/test-telephone.yml` : après chaque mise en ligne, GitHub ouvre le site publié dans Chrome au format téléphone (7 tailles d'écran), joue une séance entière et vérifie que l'écran ne défile pas, que rien ne dépasse sur le côté et qu'il n'y a pas d'erreur dans la console. Résultat et captures dans l'onglet Actions. Lancement local : `npm install --no-save playwright && node tests/telephone.cjs http://localhost:8000/`.
