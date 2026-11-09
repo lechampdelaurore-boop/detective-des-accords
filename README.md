@@ -11,7 +11,7 @@ Mini-appli pour s'entraîner aux accords, en menant l'enquête étape par étape
   2. « Qui est-ce qui… ? » : touche le sujet. Une flèche relie le sujet au verbe.
   3. Il ou ils ?
   4. La fin du verbe : -e ou -ent.
-- **Groupe du nom** : touche le déterminant, dis si c'est un seul ou plusieurs, des flèches relient le déterminant au nom puis aux adjectifs, et ajoute les s.
+- **Groupe nominal** : touche le déterminant, dis si c'est un seul ou plusieurs, des flèches relient le déterminant au nom puis aux adjectifs, et ajoute les s.
 - **Trois niveaux** par exercice : tout est guidé, puis seulement la fin avec une loupe pour revoir les étapes, puis en solo (les étapes reviennent après une erreur). Le niveau monte quand 5 des 6 dernières phrases sont réussies sans aide, sur au moins 2 jours. Il ne redescend jamais tout seul.
 - **Séance du jour** : 5 phrases (environ 5 minutes), puis « À demain ! ». Une phrase ratée revient un peu plus tard. Après deux phrases difficiles, la suivante est guidée.
 - **Erreur** : la carte secoue la tête, le téléphone vibre, puis l'astuce apparaît. Jamais de croix rouge. Au bout de deux essais, la bonne réponse clignote : chaque phrase se termine par une réussite.
