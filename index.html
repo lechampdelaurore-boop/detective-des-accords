@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Détective des accords</title>
-<meta name="description" content="Mener l'enquête pas à pas pour accorder le verbe avec son sujet et le groupe du nom.">
+<meta name="description" content="Mener l'enquête pas à pas pour accorder le verbe avec son sujet et le groupe nominal.">
 <meta name="theme-color" content="#FFF4FA" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1E1933" media="(prefers-color-scheme: dark)">
 <meta name="appli-marc" content="oui">
@@ -566,7 +566,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
         <div class="seg" role="radiogroup" aria-label="Exercices">
           <label><input type="radio" name="kind" value="both"><span>Les deux</span></label>
           <label><input type="radio" name="kind" value="v"><span>Sujet et verbe</span></label>
-          <label><input type="radio" name="kind" value="g"><span>Groupe du nom</span></label>
+          <label><input type="radio" name="kind" value="g"><span>Groupe nominal</span></label>
         </div>
         <p class="hint">Une séance compte 5 phrases (une ou deux de plus si une phrase revient). Le niveau monte quand 5 des 6 dernières phrases sont réussies sans aide, sur au moins 2 jours. Il ne redescend jamais tout seul.</p>
       </div>
@@ -666,7 +666,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     [3, 'Sur la plage, ^Léo ^et ^sa ^sœur *ramass|ent des coquillages.', 'ramassaient', 'Léo et sa sœur, ça fait deux : on dit ils.'],
     [3, '^Le ^chien ^de ^mes ^cousins *aim|e les os.', 'aimait', 'Ce ne sont pas mes cousins qui aiment les os : c\'est le chien.']
   ];
-  /* Groupe du nom : ~ devant le déterminant, @ devant le nom, _ entre le mot et sa fin (s ou rien). */
+  /* Groupe nominal : ~ devant le déterminant, @ devant le nom, _ entre le mot et sa fin (s ou rien). */
   var GROUPS = [
     [1, 'Je dessine ~des @fleur_s rouge_s.'],
     [1, '~Les @chat_s noir_s dorment.'],
@@ -687,12 +687,12 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     [2, 'Papa répare ~les @vélo_s cassé_s.'],
     [2, '~Cette @histoire_ drôle_ me plaît.'],
     [2, 'Le magicien sort ~deux @lapin_s blanc_s.'],
-    [3, '~Le @cartable_ rouge_ de mes frères est lourd.', 'Attention : « mes frères » ne fait pas partie du groupe. C\'est « le » qui commande.'],
-    [3, 'Les enfants mangent ~une @glace_ sucrée_.', 'Attention : « les enfants » ne fait pas partie du groupe. C\'est « une » qui commande.'],
+    [3, '~Le @cartable_ rouge_ de mes frères est lourd.', 'Attention : « mes frères » ne fait pas partie du groupe nominal. C\'est « le » qui commande.'],
+    [3, 'Les enfants mangent ~une @glace_ sucrée_.', 'Attention : « les enfants » ne fait pas partie du groupe nominal. C\'est « une » qui commande.'],
     [3, '~Les @robot_s géant_s du film attaquent.'],
     [3, 'Avec ~ses @ami_s fidèle_s, Léo part à l\'aventure.'],
     [3, 'Ma sœur a ~des @lunette_s ronde_s.'],
-    [3, 'Les pirates cachent ~un @trésor_ immense_.', 'Attention : « les pirates » ne fait pas partie du groupe. C\'est « un » qui commande.'],
+    [3, 'Les pirates cachent ~un @trésor_ immense_.', 'Attention : « les pirates » ne fait pas partie du groupe nominal. C\'est « un » qui commande.'],
     [3, '~Ces vieille_s @maison_s abandonnée_s font peur.']
   ];
 
@@ -772,8 +772,8 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
   var SESSION = 5, MAX_EXTRA = 2, WINDOW = 6, NEED = 5;
-  var SKILL_NAME = { v: 'Détective du verbe', g: 'Détective du groupe' };
-  var SKILL_SHORT = { v: 'Sujet et verbe', g: 'Groupe du nom' };
+  var SKILL_NAME = { v: 'Détective du verbe', g: 'Détective du groupe nominal' };
+  var SKILL_SHORT = { v: 'Sujet et verbe', g: 'Groupe nominal' };
   var STEP_NAME = { verb: 'Trouver le verbe', subj: 'Trouver le sujet', pers: 'Il ou ils', end: 'Fin du verbe (-e / -ent)', det: 'Trouver le déterminant', num: 'Un seul ou plusieurs', fill: 'Ajouter les s' };
 
 
@@ -1509,7 +1509,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
       case 'end':
         if (C.guided) return (C.found.pers === 'pl' ? 'Avec ils' : 'Avec il') + ' : quelle fin pour le verbe ?';
         return spoken ? 'Complète la fin du verbe : e, ou e n t ?' : 'Complète la fin du verbe : -e ou -ent ?';
-      case 'det': return 'Touche le déterminant : le petit mot qui commande le groupe.';
+      case 'det': return 'Touche le déterminant : le petit mot qui commande le groupe nominal.';
       case 'num': return '« ' + it.det.t + ' », c\'est un seul ou plusieurs ?';
       case 'fill':
         if (C.guided) return 'Touche les cases pour ajouter un s là où il faut. Puis « J\'ai fini ».';
@@ -1595,7 +1595,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     return '<span class="' + cls + '" data-i="' + i + '">' + inner + '</span>';
   }
 
-  // Flèches : du sujet vers le verbe, ou du déterminant vers le nom puis les autres mots du groupe.
+  // Flèches : du sujet vers le verbe, ou du déterminant vers le nom puis les autres mots du groupe nominal.
   function drawArrows() {
     if (!C) return;
     var it = C.it, links = [];
@@ -1703,7 +1703,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
       oops(h);
       if (C.stepErrs >= 2) it.words.forEach(function (x, j) { if (x.subj) pulse('[data-i="' + j + '"]'); });
     } else if (C.step === 'det') {
-      if (w.det) { C.found.det = true; good('Oui ! « ' + w.t + ' » commande le groupe.'); goStep('num', true); return; }
+      if (w.det) { C.found.det = true; good('Oui ! « ' + w.t + ' » commande le groupe nominal.'); goStep('num', true); return; }
       oops('Le déterminant est un petit mot devant le nom « ' + esc(splitPunct(it.noun.t)[0]) + ' », comme <b>le, la, un, une, les, des, mes, ces, deux</b>…');
       if (C.stepErrs >= 2) pulse('[data-i="' + it.words.indexOf(it.det) + '"]');
     }
@@ -1729,7 +1729,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     } else if (C.step === 'num') {
       if ((c === 'pl') === it.plural) {
         C.found.num = true;
-        good(it.plural ? '« ' + it.det.t + ' » : plusieurs. Tout le groupe se met au pluriel.' : '« ' + it.det.t + ' » : un seul. Pas de s dans le groupe.');
+        good(it.plural ? '« ' + it.det.t + ' » : plusieurs. Tout le groupe nominal se met au pluriel.' : '« ' + it.det.t + ' » : un seul. Pas de s dans le groupe nominal.');
         goStep('fill', true);
         return;
       }
@@ -1741,8 +1741,8 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
       if (!wrong.length) { solved(); return; }
       if (!C.guided) { oops(''); toGuided('Menons l\'enquête ensemble, étape par étape.'); return; }
       var h = it.plural
-        ? '« ' + esc(it.det.t) + ' » commande : plusieurs. Le nom et les adjectifs du groupe prennent un <b>s</b>.'
-        : '« ' + esc(it.det.t) + ' » commande : un seul. <b>Pas de s</b> dans le groupe.';
+        ? '« ' + esc(it.det.t) + ' » commande : plusieurs. Le nom et les adjectifs du groupe nominal prennent un <b>s</b>.'
+        : '« ' + esc(it.det.t) + ' » commande : un seul. <b>Pas de s</b> dans le groupe nominal.';
       if (it.note) h += ' ' + esc(it.note);
       oops(h);
       wrong.forEach(function (k) { pulse('[data-s="' + k + '"]'); });
