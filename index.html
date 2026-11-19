@@ -558,7 +558,7 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
     <section id="parent" class="stack" hidden>
       <div class="carte">
         <h2>Carnet du parent</h2>
-        <p class="hint">Tout reste sur cet appareil : rien n'est envoyé sur internet. Ces chiffres comparent votre enfant à lui-même, jamais aux autres.</p>
+        <p class="hint">Les progrès restent sur cet appareil. Seul un compteur anonyme compte les visites, sans nom ni cookie. Ces chiffres comparent votre enfant à lui-même, jamais aux autres.</p>
         <div id="pSkills" class="stack"></div>
       </div>
       <div class="carte">
@@ -1972,6 +1972,30 @@ button.slot.on { border-style: solid; border-color: var(--line); background: var
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
   }
+})();
+</script>
+<!-- Compteur de visites anonyme (GoatCounter) : compte seulement les ouvertures de la page,
+     sans cookie, sans nom, sans rien sur la progression. Hors connexion, rien n'est envoyé.
+     Pour ne pas compter un appareil : ouvrir une fois l'adresse avec #sans-compteur à la fin
+     (#avec-compteur pour annuler). -->
+<script>
+(function () {
+  try {
+    var cle = 'marc.sans-compteur';
+    try {
+      if (location.hash === '#sans-compteur') localStorage.setItem(cle, 'oui');
+      if (location.hash === '#avec-compteur') localStorage.removeItem(cle);
+      if (/^#(sans|avec)-compteur$/.test(location.hash)) history.replaceState(null, '', location.pathname + location.search);
+      if (localStorage.getItem(cle) === 'oui') return;
+    } catch (e) {}
+    if (location.hostname !== 'lechampdelaurore-boop.github.io' || navigator.webdriver || !navigator.onLine || !navigator.sendBeacon) return;
+    var q = 'p=' + encodeURIComponent(location.pathname) +
+      '&t=' + encodeURIComponent(document.title) +
+      '&r=' + encodeURIComponent(document.referrer) +
+      '&s=' + encodeURIComponent(screen.width + ',' + screen.height + ',' + (window.devicePixelRatio || 1)) +
+      '&rnd=' + Math.random().toString(36).slice(2);
+    navigator.sendBeacon('https://lechampdelaurore.goatcounter.com/count?' + q);
+  } catch (e) {}
 })();
 </script>
 </body>
